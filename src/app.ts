@@ -9,13 +9,18 @@ import { createConnection } from 'typeorm';
 import { HelloController } from './controllers';
 import { ApolloServer } from 'apollo-server-express';
 import { createSchema } from './utils/createSchema';
+/*
 import queryComplexity, {
     fieldExtensionsEstimator,
     simpleEstimator,
 } from 'graphql-query-complexity';
+*/
 import connectRedis from 'connect-redis';
 import { redis } from './utils/redis';
 import { getTypeormConnection } from './utils/createConnection';
+import { verify } from 'jsonwebtoken';
+import { User } from './entity/User';
+import { createAccessToken, createRefreshToken } from './utils/createTokens';
 
 const app = Express();
 const main = async () => {
@@ -31,6 +36,7 @@ const main = async () => {
         context: ({ req, res }: any) => ({ req, res }),
         playground: true,
         introspection: true,
+        /* ValidationRules not working currently (no queryvabriables)
         validationRules: [
             queryComplexity({
                 // The maximum allowed query complexity, queries above this threshold will be rejected
@@ -57,7 +63,8 @@ const main = async () => {
                     }),
                 ],
             }) as any,
-        ],
+],
+        */
     });
 
     // const clientOrigin = origin: 'http://herokuurl';
@@ -71,6 +78,53 @@ const main = async () => {
     app.use(bodyParser.json());
     app.use(cookieParser());
     app.use(morgan('tiny'));
+
+    app.use(async (req: any, res: any, next) => {
+        console.log(req.cookies);
+        const refreshToken = req.cookies['refresh-token'];
+        const accessToken = req.cookies['access-token'];
+        if (!refreshToken && !accessToken) {
+            return next();
+        }
+        let data;
+        try {
+            data = verify(
+                accessToken,
+                process.env.ACCESS_TOKEN_SECRET as string
+            ) as any;
+            // accessToken verified
+            req.userId = data.userId;
+            return next();
+        } catch {
+            // console.log
+        }
+
+        if (!refreshToken) {
+            return next();
+        }
+
+        try {
+            data = verify(
+                refreshToken,
+                process.env.ACCESS_TOKEN_SECRET as string
+            ) as any;
+            // refreshToken verified
+        } catch {
+            return next();
+        }
+        const user = await User.findOne(data.userId);
+        if (!user) {
+            // invalid tokens
+            return next();
+        }
+
+        res.cookie('refresh-token', createRefreshToken(user));
+        res.cookie('access-token', createAccessToken(user));
+
+        req.userId = data.userId;
+
+        next();
+    });
 
     const RedisStore = connectRedis(session);
 

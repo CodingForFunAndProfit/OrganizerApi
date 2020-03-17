@@ -4,11 +4,13 @@ import { Context } from '../../types/Context';
 
 @Resolver()
 export class MeResolver {
-    @Query(() => User, { nullable: true, complexity: 5 })
+    @Query(() => User, { nullable: true })
     public async me(@Ctx() ctx: Context): Promise<User | undefined> {
-        if (!ctx.req.session!.userId) {
+        // console.log('Me Resolver userId: ' + (ctx.req as any).userId);
+
+        if (!(ctx.req as any).userId) {
             return undefined;
         }
-        return User.findOne(ctx.req.session!.userId);
+        return User.findOne((ctx.req as any).userId);
     }
 }

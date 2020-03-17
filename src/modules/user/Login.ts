@@ -1,7 +1,19 @@
-import { Resolver, Mutation, Arg, Ctx } from 'type-graphql';
+import {
+    Resolver,
+    Mutation,
+    Arg,
+    Ctx,
+    Query,
+    UseMiddleware,
+} from 'type-graphql';
 import bcrypt from 'bcryptjs';
 import { User } from '../../entity/User';
 import { Context } from '../../types/Context';
+import {
+    createAccessToken,
+    createRefreshToken,
+} from '../../utils/createTokens';
+import { isAuth } from '../isAuthMiddleware';
 
 @Resolver()
 export class LoginResolver {
@@ -27,8 +39,32 @@ export class LoginResolver {
             return null;
         }
 
-        ctx.req.session!.userId = user.id;
+        const refreshToken = createRefreshToken(user);
+        const accessToken = createAccessToken(user);
 
+        ctx.res.cookie('refresh-token', refreshToken);
+
+        ctx.res.cookie('access-token', accessToken);
         return user;
+    }
+    @Mutation(() => Boolean)
+    public async invalidateTokens(@Ctx() ctx: Context): Promise<boolean> {
+        if (!(ctx.req as any).userId) {
+            return false;
+        }
+
+        const user = await User.findOne((ctx.req as any).userId);
+
+        if (!user) {
+            return false;
+        }
+        await user.save();
+        return true;
+    }
+
+    @Query(() => String)
+    @UseMiddleware(isAuth)
+    public async GoodBye(@Ctx() { payload }: Context) {
+        return `your user id is: ${payload?.userId}`;
     }
 }
