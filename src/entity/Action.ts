@@ -14,5 +14,5 @@ export class Action extends BaseEntity {
 
     @Field()
     @Column('boolean', { default: false })
-    done!: boolean;
+    completed!: boolean;
 }

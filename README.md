@@ -37,7 +37,10 @@ PostgreSQL:
 ## TODOS
 
 -   confirm user link generation config file for dev and live
--   Migrations
+-   Database Migrations
+-   continuous integration / well defined workflow
+-   tests
+-   github commit messages
 
 ## Links
 
@@ -47,3 +50,6 @@ PostgreSQL:
 -   [How To GraphQL - Angular Apollo - Authetication](https://www.howtographql.com/angular-apollo/5-authentication/)
 -   [TypeORM Migrations](https://github.com/typeorm/typeorm/blob/master/docs/migrations.md#generating-migrations)
 -   [TypeORM Migrations PostgreSQL](https://wanago.io/2019/01/28/typeorm-migrations-postgres/)
+-   [Node best practices](https://github.com/goldbergyoni/nodebestpractices)
+-   [Redislab](https://app.redislabs.com/#/login)
+-   [TypeGraphQl Ben Awad](https://github.com/benawad/type-graphql)
