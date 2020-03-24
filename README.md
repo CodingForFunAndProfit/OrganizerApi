@@ -44,6 +44,7 @@ PostgreSQL / TypeORM:
 -   development db synchronized, test db with migrations, production db with migrations
 -   feature commit to github
 -   merge on successful tests and deliver to production
+-   master -> featurebranch -> push -> test -> merge -> deploy to staging
 
 ## TODOS
 
@@ -83,6 +84,8 @@ PostgreSQL / TypeORM:
 -   [ExpressJS & GraphQL — Authentication & Access Control](https://itnext.io/expressjs-graphql-authentication-access-control-c5c8fe360b07)
 -   [parabol application](https://github.com/ParabolInc/parabol)
 -   [reddit: testing](https://www.reddit.com/r/expressjs/comments/9fua5k/integration_tests_am_i_doing_it_right/)
+-   [Git Feature Branch Workflow](https://www.atlassian.com/git/tutorials/comparing-workflows/feature-branch-workflow)
+-   [How to set up an efficient development workflow with Git and CI/CD](https://proandroiddev.com/how-to-set-up-an-efficient-development-workflow-with-git-and-ci-cd-5e8916f6bece)
 
 ## Application
 
