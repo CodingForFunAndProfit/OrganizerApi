@@ -46,6 +46,18 @@ PostgreSQL / TypeORM:
 -   merge on successful tests and deliver to production
 -   master -> featurebranch -> push -> test -> merge -> deploy to staging
 
+### GIT
+
+-   git checkout -b featurebranch master // create new featurebranch to develop on from currrent master
+-   git add, commit
+-   git push -u origin featurebranch
+-   pullrequest
+-   merge
+-   git checkout master
+    git pull
+    git pull origin marys-feature
+    git push
+
 ## TODOS
 
 -   restructuring / better of files&modules
