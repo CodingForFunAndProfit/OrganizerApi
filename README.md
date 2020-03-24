@@ -47,9 +47,10 @@ PostgreSQL / TypeORM:
 
 ## TODOS
 
+-   restructuring / better of files&modules
 -   confirm user link generation config file for dev and live
 -   continuous integration / well defined workflow
--   tests
+-   tests, frst working examples exist -> finish current resolvers
 -   github commit messages styleguide
 -   databases (dev, test & production) -> finalize workflow with ci / createConnection is bad right now
 -   docker yes / no?
