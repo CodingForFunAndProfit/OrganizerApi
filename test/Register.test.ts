@@ -1,8 +1,8 @@
 import { testConn } from './utils/testConn';
 import { Connection } from 'typeorm';
-import { gCall } from './utils/gCall';
 import faker from 'faker';
 import { User } from '../src/entity/User';
+import { graphqlCall } from './utils/graphqlCall';
 
 let conn: Connection;
 beforeAll(async () => {
@@ -10,7 +10,7 @@ beforeAll(async () => {
 });
 
 afterAll(async () => {
-    await conn.close();
+    if (conn) await conn.close();
 });
 
 const registerMutation = `
@@ -31,14 +31,15 @@ describe('Register', () => {
             firstName: faker.name.firstName(),
             lastName: faker.name.lastName(),
             email: faker.internet.email().replace('_', '.'),
-            password: faker.internet.password(5)
+            password: faker.internet.password(5),
         };
 
-        const response = await gCall({
+        const response = await graphqlCall({
             source: registerMutation,
             variableValues: {
-                input: user
-            }
+                input: user,
+            },
+            token: '',
         });
         if (response && response.errors) {
             console.log(response.errors[0].originalError);
@@ -48,12 +49,14 @@ describe('Register', () => {
                 register: {
                     firstName: user.firstName,
                     lastName: user.lastName,
-                    email: user.email
-                }
-            }
+                    email: user.email,
+                },
+            },
         });
 
-        const dbUser = await User.findOne({ where: { email: user.email } });
+        const dbUser = await User.findOne({
+            where: { email: user.email },
+        });
         expect(dbUser).toBeDefined();
         expect(dbUser!.confirmed).toBeFalsy();
         expect(dbUser!.firstName).toBe(user.firstName);

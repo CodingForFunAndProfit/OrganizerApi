@@ -1,14 +1,10 @@
 import { User } from '../entity/User';
 import { sign } from 'jsonwebtoken';
 
-export const createAccessToken = (user: User) => {
-    return sign(
-        { userId: user.id },
-        process.env.ACCESS_TOKEN_SECRET as string,
-        {
-            expiresIn: '120min',
-        }
-    );
+export const createAccessToken = (uid: string) => {
+    return sign({ userId: uid }, process.env.ACCESS_TOKEN_SECRET as string, {
+        expiresIn: '120min',
+    });
 };
 
 export const createRefreshToken = (user: User) => {

@@ -1,13 +1,10 @@
-import { Field, ID, ObjectType, Root } from 'type-graphql';
-import { BaseEntity, Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Field, ObjectType, Root } from 'type-graphql';
+import { Column, Entity } from 'typeorm';
+import { Base } from '../common/Base';
 
 @ObjectType()
 @Entity()
-export class User extends BaseEntity {
-    @Field(() => ID)
-    @PrimaryGeneratedColumn()
-    public id!: number;
-
+export class User extends Base {
     @Field()
     @Column('text', { unique: true })
     public email!: string;

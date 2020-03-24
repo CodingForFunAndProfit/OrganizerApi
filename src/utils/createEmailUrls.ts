@@ -2,7 +2,7 @@ import { v4 } from 'uuid';
 import { redis } from './redis';
 import { confirmUserPrefix, forgotPasswordPrefix } from './redisPrefixes';
 
-export const createConfirmationUrl = (userId: number) => {
+export const createConfirmationUrl = (userId: string) => {
     const id = v4();
 
     try {
@@ -14,7 +14,7 @@ export const createConfirmationUrl = (userId: number) => {
     return `http://localhost:8080/confirm-user/${id}`;
 };
 
-export const createForgotPasswordUrl = (userId: number) => {
+export const createForgotPasswordUrl = (userId: string) => {
     const id = v4();
     redis.set(forgotPasswordPrefix + id, userId, 'ex', 60 * 60 * 24); // 1 day expiration
 

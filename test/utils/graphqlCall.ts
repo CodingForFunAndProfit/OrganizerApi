@@ -2,19 +2,27 @@ import { graphql, GraphQLSchema } from 'graphql';
 import { createSchema } from '../../src/utils/createSchema';
 import Maybe from 'graphql/tsutils/Maybe';
 
-interface Options {
+interface GraphQLCallOptions {
     source: string;
     variableValues?: Maybe<{
         [key: string]: any;
     }>;
-    userId?: number;
+    token: string;
 }
 
 let schema: GraphQLSchema;
 
-export const gCall = async ({ source, variableValues, userId }: Options) => {
+export const graphqlCall = async ({
+    source,
+    variableValues,
+    token,
+}: GraphQLCallOptions) => {
     if (!schema) {
         schema = await createSchema();
+    }
+    let authorizationHeader = '';
+    if (token && token !== '') {
+        authorizationHeader = token;
     }
     return graphql({
         schema,
@@ -22,13 +30,13 @@ export const gCall = async ({ source, variableValues, userId }: Options) => {
         variableValues,
         contextValue: {
             req: {
-                session: {
-                    userId
-                }
+                headers: {
+                    authorization: authorizationHeader,
+                },
             },
             res: {
-                clearCookie: jest.fn()
-            }
-        }
+                clearCookie: jest.fn(),
+            },
+        },
     });
 };

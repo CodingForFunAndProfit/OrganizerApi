@@ -18,9 +18,6 @@ import queryComplexity, {
 import connectRedis from 'connect-redis';
 import { redis } from './utils/redis';
 import { getTypeormConnection } from './utils/createConnection';
-import { verify } from 'jsonwebtoken';
-import { User } from './entity/User';
-import { createAccessToken, createRefreshToken } from './utils/createTokens';
 
 const app = Express();
 const main = async () => {
@@ -36,35 +33,6 @@ const main = async () => {
         context: ({ req, res }: any) => ({ req, res }),
         playground: true,
         introspection: true,
-        /* ValidationRules not working currently (no queryvabriables)
-        validationRules: [
-            queryComplexity({
-                // The maximum allowed query complexity, queries above this threshold will be rejected
-                maximumComplexity: 8,
-                // The query variables. This is needed because the variables are not available
-                // in the visitor of the graphql-js library
-                variables: {},
-                // Optional callback function to retrieve the determined query complexity
-                // Will be invoked whether the query is rejected or not
-                // This can be used for logging or to implement rate limiting
-                // tslint:disable-next-line: variable-name
-                onComplete: (_complexity: number) => {
-                    // console.log('Query Complexity:', complexity);
-                },
-                estimators: [
-                    // Using fieldConfigEstimator is mandatory to make it work with type-graphql
-                    // fieldConfigEstimator(),
-                    // DEPRECATION WARNING: fieldConfigEstimator is deprecated. Use fieldExtensionsEstimator instead
-                    fieldExtensionsEstimator(),
-                    // This will assign each field a complexity of 1 if no other estimator
-                    // returned a value. We can define the default value for fields not explicitly annotated
-                    simpleEstimator({
-                        defaultComplexity: 1,
-                    }),
-                ],
-            }) as any,
-],
-        */
     });
 
     // const clientOrigin = origin: 'http://herokuurl';
@@ -78,53 +46,6 @@ const main = async () => {
     app.use(bodyParser.json());
     app.use(cookieParser());
     app.use(morgan('tiny'));
-
-    app.use(async (req: any, res: any, next) => {
-        console.log(req.cookies);
-        const refreshToken = req.cookies['refresh-token'];
-        const accessToken = req.cookies['access-token'];
-        if (!refreshToken && !accessToken) {
-            return next();
-        }
-        let data;
-        try {
-            data = verify(
-                accessToken,
-                process.env.ACCESS_TOKEN_SECRET as string
-            ) as any;
-            // accessToken verified
-            req.userId = data.userId;
-            return next();
-        } catch {
-            // console.log
-        }
-
-        if (!refreshToken) {
-            return next();
-        }
-
-        try {
-            data = verify(
-                refreshToken,
-                process.env.ACCESS_TOKEN_SECRET as string
-            ) as any;
-            // refreshToken verified
-        } catch {
-            return next();
-        }
-        const user = await User.findOne(data.userId);
-        if (!user) {
-            // invalid tokens
-            return next();
-        }
-
-        res.cookie('refresh-token', createRefreshToken(user));
-        res.cookie('access-token', createAccessToken(user));
-
-        req.userId = data.userId;
-
-        next();
-    });
 
     const RedisStore = connectRedis(session);
 

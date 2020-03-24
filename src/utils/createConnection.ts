@@ -7,9 +7,9 @@ export const getTypeormConnection = async () => {
         synchronize: true,
         logging: false,
         extra: {
-            ssl: true
+            ssl: true,
         },
-        entities: ['dist/entity/*.*']
+        entities: ['dist/entity/*.*'],
     };
     if (process.env.DATABASE_URL) {
         Object.assign(connectionOptions, { url: process.env.DATABASE_URL });

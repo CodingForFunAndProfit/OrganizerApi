@@ -1,4 +1,4 @@
-import { Resolver, Mutation, Arg, Query, Int } from 'type-graphql';
+import { Resolver, Mutation, Arg, Query } from 'type-graphql';
 import { Action } from '../../entity/Action';
 import { ActionInput } from './ActionInput';
 
@@ -14,7 +14,7 @@ export class ActionResolver {
 
     @Mutation(() => Boolean)
     async updateAction(
-        @Arg('id', () => Int) id: number,
+        @Arg('id', () => String) id: string,
         @Arg('options', () => ActionInput) options: ActionInput
     ) {
         await Action.update({ id }, options);
@@ -22,7 +22,7 @@ export class ActionResolver {
     }
 
     @Mutation(() => Boolean)
-    async deleteAction(@Arg('id', () => Int) id: number) {
+    async deleteAction(@Arg('id', () => String) id: string) {
         await Action.delete({ id });
         return true;
     }

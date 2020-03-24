@@ -1,6 +1,7 @@
-import { createConnection } from 'typeorm';
+import { createConnection, getConnectionOptions } from 'typeorm';
 
-export const testConn = (drop: boolean = false) => {
+export const testConn = async (drop: boolean = false) => {
+    const connectionOptions = await getConnectionOptions();
     if (process.env.DATABASE_URL) {
         return createConnection({
             name: 'default',
@@ -8,20 +9,10 @@ export const testConn = (drop: boolean = false) => {
             url: process.env.DATABASE_URL,
             synchronize: drop,
             dropSchema: drop,
-            entities: [__dirname + '/../../src/entity/*.*']
+            entities: [__dirname + '/../../src/entity/*.*'],
         });
     } else {
-        return createConnection({
-            name: 'default',
-            type: 'postgres',
-            host: 'localhost',
-            port: 5433,
-            username: 'username',
-            password: 'password',
-            database: 'database-test',
-            synchronize: drop,
-            dropSchema: drop,
-            entities: [__dirname + '/../../src/entity/*.*']
-        });
+        // console.log(connectionOptions);
+        return createConnection(connectionOptions);
     }
 };

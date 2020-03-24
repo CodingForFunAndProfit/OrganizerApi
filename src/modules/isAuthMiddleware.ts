@@ -1,19 +1,17 @@
 import { MiddlewareFn } from 'type-graphql';
-import { Context } from '../types/Context';
-import { verify } from 'jsonwebtoken';
+import { Context, TokenPayload } from '../types/Context';
+import { verifyToken } from '../utils/verifyToken';
 
 export const isAuth: MiddlewareFn<Context> = async ({ context }, next) => {
-    const auth = (context as Context).req.headers.authorization;
-
-    if (!auth) {
+    const token = context.req.headers.authorization;
+    // console.log('isAuth:token: ' + token);
+    if (!token) {
         throw new Error('not authenticated');
     }
-
     try {
-        const payload = verify(auth, process.env.ACCESS_TOKEN_SECRET!);
-        (context as Context).payload = payload as any;
+        const tokenPayload = (await verifyToken(token)) as TokenPayload;
+        context.payload = tokenPayload;
     } catch (error) {
-        // console.log(error);
         throw new Error('not authenticated');
     }
     return next();

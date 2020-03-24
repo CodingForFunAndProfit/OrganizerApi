@@ -30,7 +30,7 @@ router.post('/refresh_token', async (req: Request, res: Response) => {
         return res.send({ ok: false, accessToken: '' });
     }
 
-    return res.send({ ok: true, accessToken: createAccessToken(user) });
+    return res.send({ ok: true, accessToken: createAccessToken(user.id) });
 });
 
 export const HelloController: Router = router;
