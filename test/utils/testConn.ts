@@ -1,18 +1,10 @@
 import { createConnection, getConnectionOptions } from 'typeorm';
+import Debug from 'debug';
+const debug = Debug('app');
 
-export const testConn = async (drop: boolean = false) => {
-    const connectionOptions = await getConnectionOptions();
-    if (process.env.DATABASE_URL) {
-        return createConnection({
-            name: 'default',
-            type: 'postgres',
-            url: process.env.DATABASE_URL,
-            synchronize: drop,
-            dropSchema: drop,
-            entities: [__dirname + '/../../src/entity/*.*'],
-        });
-    } else {
-        // console.log(connectionOptions);
-        return createConnection(connectionOptions);
-    }
+export const testConn = async () => {
+    const connectionOptions = await getConnectionOptions('test');
+
+    debug('Using Databaseconfig: ' + connectionOptions.name);
+    return await createConnection(connectionOptions);
 };

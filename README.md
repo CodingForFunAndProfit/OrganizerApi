@@ -98,6 +98,7 @@ PostgreSQL / TypeORM:
 -   [reddit: testing](https://www.reddit.com/r/expressjs/comments/9fua5k/integration_tests_am_i_doing_it_right/)
 -   [Git Feature Branch Workflow](https://www.atlassian.com/git/tutorials/comparing-workflows/feature-branch-workflow)
 -   [How to set up an efficient development workflow with Git and CI/CD](https://proandroiddev.com/how-to-set-up-an-efficient-development-workflow-with-git-and-ci-cd-5e8916f6bece)
+-   [A curated list of awesome actions to use on GitHub](https://github.com/sdras/awesome-actions)
 
 ## Application
 
@@ -113,3 +114,21 @@ PostgreSQL / TypeORM:
 
 -   JsonWebToken (JWT):
     -   Access & RefreshToken
+
+## Needed for this app to run
+
+.env file or variables:
+REDISLABSURL=
+REDISLABSPASSWORD=
+SESSION_SECRET=
+EMAILACCOUNT=
+EMAILPASSWORD=
+REFRESH_TOKEN_SECRET=
+ACCESS_TOKEN_SECRET=
+
+PG_USERNAME=
+PG_PASSWORD=
+PG_DATABASE=
+PG_PORT=
+PG_HOST=
+PG_TESTDATABASE=

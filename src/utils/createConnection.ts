@@ -1,26 +1,13 @@
 import { getConnectionOptions, ConnectionOptions } from 'typeorm';
+import Debug from 'debug';
+const debug = Debug('app');
 
 export const getTypeormConnection = async () => {
     let connectionOptions: ConnectionOptions;
-    connectionOptions = {
-        type: 'postgres',
-        synchronize: true,
-        logging: false,
-        extra: {
-            ssl: true,
-        },
-        entities: ['dist/entity/*.*'],
-    };
-    if (process.env.DATABASE_URL) {
-        Object.assign(connectionOptions, { url: process.env.DATABASE_URL });
-    } else if (
-        process.env.NODE_ENV &&
-        process.env.NODE_ENV!.trim() === 'production'
-    ) {
-        connectionOptions = await getConnectionOptions('distfolderlocal');
-    } else {
-        connectionOptions = await getConnectionOptions();
-    }
 
+    debug('NODE_ENV: ' + process.env.NODE_ENV);
+    connectionOptions = await getConnectionOptions(process.env.NODE_ENV);
+
+    debug('Using Databaseconfig: ' + connectionOptions.name);
     return connectionOptions;
 };

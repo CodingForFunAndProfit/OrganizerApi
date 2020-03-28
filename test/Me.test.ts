@@ -1,5 +1,5 @@
-import { testConn } from './utils/testConn';
-import { Connection } from 'typeorm';
+// import { testConn } from './utils/testConn';
+import { Connection, createConnection, ConnectionOptions } from 'typeorm';
 // import { gCall } from './utils/gCall';
 import faker from 'faker';
 import { User } from '../src/entity/User';
@@ -7,10 +7,33 @@ import { graphqlCall } from './utils/graphqlCall';
 import { createAccessToken } from '../src/utils/createTokens';
 // import request from 'supertest';
 // import { appPromise } from '../src/app';
+import dotenv from 'dotenv';
+dotenv.config();
 
 let conn: Connection;
 beforeAll(async () => {
-    conn = await testConn(true);
+    // const connectionOptions = await getConnectionOptions('test');
+    let connectionOptions: ConnectionOptions;
+    connectionOptions = {
+        name: 'default',
+        type: 'postgres',
+        host: 'localhost',
+        port: 5433,
+        username: 'orgadbuser',
+        password: 'Fa3cdewqcdwbVxe7QdYY',
+        database: 'orgadb_test',
+        synchronize: false,
+        logging: false,
+        entities: ['src/entity/**/*.ts'],
+        migrations: ['src/database/migrations/**/*.ts'],
+        cli: {
+            entitiesDir: 'src/entity',
+            migrationsDir: 'src/database/migrations',
+        },
+    };
+    console.log(connectionOptions.name);
+    conn = await createConnection(connectionOptions);
+    // conn = await testConn();
 });
 
 afterAll(async () => {
@@ -44,7 +67,7 @@ describe('Me Query', () => {
             },
         });
     });
-
+    /*
     it('GoodByQuery', async () => {
         const query = `
         {
@@ -75,7 +98,7 @@ describe('Me Query', () => {
             },
         });
     });
-
+*/
     it('Show loggedin user data', async () => {
         const user = await User.create({
             firstName: faker.name.firstName(),
