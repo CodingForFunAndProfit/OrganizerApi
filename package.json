@@ -17,7 +17,7 @@
         "test:migration": "typeorm migration:run --connection test",
         "prod:migration": "typeorm migration:run --connection production",
         "prod:migration:revert": "typeorm migration:revert --connection production",
-        "test:github": "set NODE_ENV=github&& jest --passWithNoTests --detectOpenHandles --forceExit --testTimeout=10000",
+        "test:github": "jest --passWithNoTests --detectOpenHandles --forceExit --testTimeout=10000",
         "migrate:github": "typeorm migration:run --connection github",
         "migration:gen": "./node_modules/.bin/ts-node ./node_modules/typeorm/cli.js migration:generate --connection test -n",
         "migration:run": "./node_modules/.bin/ts-node ./node_modules/typeorm/cli.js migration:run --connection test",
