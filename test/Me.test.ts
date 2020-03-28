@@ -1,5 +1,10 @@
 // import { testConn } from './utils/testConn';
-import { Connection, createConnection, ConnectionOptions } from 'typeorm';
+import {
+    Connection,
+    createConnection,
+    ConnectionOptions,
+    getConnectionOptions,
+} from 'typeorm';
 // import { gCall } from './utils/gCall';
 import faker from 'faker';
 import { User } from '../src/entity/User';
@@ -12,25 +17,8 @@ dotenv.config();
 
 let conn: Connection;
 beforeAll(async () => {
-    // const connectionOptions = await getConnectionOptions('test');
     let connectionOptions: ConnectionOptions;
-    connectionOptions = {
-        name: 'default',
-        type: 'postgres',
-        host: 'localhost',
-        port: 5433,
-        username: 'orgadbuser',
-        password: 'Fa3cdewqcdwbVxe7QdYY',
-        database: 'orgadb_test',
-        synchronize: false,
-        logging: false,
-        entities: ['src/entity/**/*.ts'],
-        migrations: ['src/database/migrations/**/*.ts'],
-        cli: {
-            entitiesDir: 'src/entity',
-            migrationsDir: 'src/database/migrations',
-        },
-    };
+    connectionOptions = await getConnectionOptions(process.env.NODE_ENV);
     console.log(connectionOptions.name);
     conn = await createConnection(connectionOptions);
     // conn = await testConn();
