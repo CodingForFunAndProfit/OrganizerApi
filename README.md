@@ -40,11 +40,20 @@ PostgreSQL / TypeORM:
 
 ## Workflow
 
--   VSCODE
+## Pre-Release Phase
+
+-   alpha-phase: develop on master and push them directly to github & heroku, for testing and setup
+-   start with the normal workflow in beta-phase
+
+## Normal workflow
+
+-   work on feature branches
 -   development db synchronized, test db with migrations, production db with migrations
--   feature commit to github
--   merge on successful tests and deliver to production
--   master -> featurebranch -> push -> test -> merge -> deploy to staging
+-   push featurebranch
+-   pull request
+-   merge and deploy to staging
+-   short staging test -> promote to production
+-   delete feature branch
 
 ### GIT
 
@@ -125,6 +134,7 @@ PostgreSQL / TypeORM:
 ## Needed for this app to run
 
 .env file or variables:
+DATABASE_URL
 REDISLABSURL=
 REDISLABSPASSWORD=
 SESSION_SECRET=
@@ -132,10 +142,3 @@ EMAILACCOUNT=
 EMAILPASSWORD=
 REFRESH_TOKEN_SECRET=
 ACCESS_TOKEN_SECRET=
-
-PG_USERNAME=
-PG_PASSWORD=
-PG_DATABASE=
-PG_PORT=
-PG_HOST=
-PG_TESTDATABASE=
