@@ -1,5 +1,5 @@
 import { MiddlewareFn } from 'type-graphql';
-import { Context, TokenPayload } from '../types/Context';
+import { Context, TokenPayload } from '../types/context';
 import { verifyToken } from '../utils/verifyToken';
 import { isStillValid } from '../utils/tokenBlacklist';
 
