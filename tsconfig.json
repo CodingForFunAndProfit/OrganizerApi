@@ -1,35 +1,14 @@
 {
     "compilerOptions": {
-        "module": "commonjs",
-        "esModuleInterop": true,
-        "target": "es6",
-        "allowJs": true,
-        "declaration": false,
-        "composite": false,
-        "removeComments": true /* Do not emit comments to output. */,
-        "strict": true /* Enable all strict type-checking options. */,
-        "noImplicitAny": true /* Raise error on expressions and declarations with an implied 'any' type. */,
-        "strictNullChecks": true,
-        "strictFunctionTypes": true,
-        "noImplicitThis": true,
-        "noUnusedLocals": true,
-        "noUnusedParameters": true,
-        "noImplicitReturns": true,
-        "noFallthroughCasesInSwitch": true,
-        "moduleResolution": "node",
-        "allowSyntheticDefaultImports": true,
-        "skipLibCheck": true,
         "sourceMap": true,
-        "outDir": "dist",
-        "baseUrl": ".",
-        "paths": {
-            "*": ["node_modules/*", "src/types/*"]
-        },
-        "lib": ["dom", "es6", "es2017", "esnext.asynciterable"],
-        "experimentalDecorators": true /* Enables experimental support for ES7 decorators. */,
-        "emitDecoratorMetadata": true /* Enables experimental support for emitting type metadata for decorators. */
-        // "types": ["jest", "node"]
+        "target": "es6",
+        "module": "commonjs",
+        "outDir": "./dist",
+        "baseUrl": "./src",
+        "esModuleInterop": true,
+        "emitDecoratorMetadata": true,
+        "experimentalDecorators": true
     },
-    "include": ["./src/**/*.tsx", "./src/**/*.ts"],
-    "exclude": ["node_modules", "**/*.spec.ts", "**/*.test.ts"]
+    "include": ["src/**/*.ts"],
+    "exclude": ["node_modules"]
 }

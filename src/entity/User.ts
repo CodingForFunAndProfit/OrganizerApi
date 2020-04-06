@@ -1,30 +1,20 @@
-import { Field, ObjectType, Root } from 'type-graphql';
-import { Column, Entity } from 'typeorm';
-import { Base } from '../common/Base';
+import { Entity, Column, PrimaryGeneratedColumn, BaseEntity } from 'typeorm';
+import { ObjectType, Field, ID } from 'type-graphql';
 
 @ObjectType()
 @Entity()
-export class User extends Base {
+export class User extends BaseEntity {
+    @Field(type => ID)
+    @PrimaryGeneratedColumn('uuid')
+    public id!: string;
+
     @Field()
     @Column('text', { unique: true })
-    public email!: string;
+    email: string;
 
-    @Column()
+    @Column('text', { nullable: true })
     public password!: string;
-
-    @Field()
-    @Column()
-    public firstName!: string;
-
-    @Field()
-    @Column()
-    public lastName!: string;
 
     @Column('bool', { default: false })
     public confirmed!: boolean;
-
-    @Field()
-    public name(@Root() parent: User): string {
-        return `${parent.firstName} ${parent.lastName}`;
-    }
 }

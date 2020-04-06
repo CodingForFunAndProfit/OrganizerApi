@@ -1,2 +1,2 @@
-release: npm run prod:migration
-web: node dist/server
+release: npm run run:migration
+web: npm start

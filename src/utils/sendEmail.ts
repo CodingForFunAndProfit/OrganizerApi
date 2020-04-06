@@ -5,8 +5,8 @@ export async function sendEmail(email: string, url: string) {
         service: 'gmail',
         auth: {
             user: process.env.EMAILACCOUNT,
-            pass: process.env.EMAILPASSWORD
-        }
+            pass: process.env.EMAILPASSWORD,
+        },
     });
 
     // send mail with defined transport object
@@ -17,7 +17,7 @@ export async function sendEmail(email: string, url: string) {
             to: email,
             subject: 'Hi',
             text: `${url}`,
-            html: `<a href="${url}">${url}</a>`
+            html: `<a href="${url}">${url}</a>`,
         });
     } catch (error) {
         console.error('Error:' + error);

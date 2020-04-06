@@ -5,29 +5,23 @@
     "main": "dist/server.js",
     "scripts": {
         "clean": "rimraf ./dist",
-        "dev": "set NODE_ENV=development&& set DEBUG=app && nodemon --exec ts-node ./src/server.ts",
         "prebuild": "npm run clean && tslint -c tslint.json -p tsconfig.json --fix",
         "build": "tsc -p .",
-        "heroku-postbuild": "npm run build",
-        "start": "npm run serve",
-        "serve": "set NODE_ENV=production&& node ./dist/server",
-        "watch-node": "set DEBUG=app && node ./dist/server",
-        "watch-ts": "tsc -w",
-        "test": "jest --passWithNoTests --detectOpenHandles --forceExit --testTimeout=10000",
-        "test:migration": "typeorm migration:run --connection test",
-        "prod:migration": "typeorm migration:run --connection production",
-        "prod:migration:revert": "typeorm migration:revert --connection production",
-        "test:github": "jest --passWithNoTests --detectOpenHandles --forceExit --testTimeout=10000",
-        "migrate:github": "typeorm migration:run --connection github",
-        "migration:gen": "./node_modules/.bin/ts-node ./node_modules/typeorm/cli.js migration:generate --connection test -n",
-        "migration:run": "./node_modules/.bin/ts-node ./node_modules/typeorm/cli.js migration:run --connection test",
-        "migration:revert": "./node_modules/.bin/ts-node ./node_modules/typeorm/cli.js migration:revert --connection test"
+        "start": "node ./dist/server",
+        "dev": "set NODE_ENV=development&&set DEBUG=app&& nodemon --exec ts-node ./src/server.ts",
+        "test:dev": "set DEBUG=app&&set NODE_ENV=development&&jest --passWithNoTests --detectOpenHandles --forceExit --testTimeout=10000 --verbose --watch",
+        "test:local": "set DEBUG=app&&set NODE_ENV=test&&jest --passWithNoTests --detectOpenHandles --forceExit --testTimeout=10000 --verbose",
+        "test": "jest --passWithNoTests --detectOpenHandles --forceExit --testTimeout=10000 --verbose",
+        "gen:migration": "./node_modules/.bin/ts-node ./node_modules/typeorm/cli.js migration:generate --connection migration -n",
+        "run:migration:local": "./node_modules/.bin/ts-node ./node_modules/typeorm/cli.js migration:run --connection migration",
+        "rev:migration:local": "./node_modules/.bin/ts-node ./node_modules/typeorm/cli.js migration:revert --connection migration",
+        "run:migration": "typeorm migration:run --connection default"
     },
     "jest": {
         "transform": {
             "^.+\\.tsx?$": "ts-jest"
         },
-        "testRegex": "(/__tests__/.*|(\\.|/)(test|spec))\\.(jsx?|tsx?)$",
+        "testRegex": "(/tests/.*|(\\.|/)(test|spec))\\.(jsx?|tsx?)$",
         "moduleFileExtensions": [
             "ts",
             "tsx",
@@ -35,12 +29,25 @@
             "jsx",
             "json",
             "node"
+        ],
+        "testPathIgnorePatterns": [
+            "/tests/utils"
         ]
     },
     "repository": {
         "type": "git",
         "url": "git+https://github.com/CodingForFunAndProfit/OrganizerApi.git"
     },
+    "keywords": [
+        "express",
+        "graphql",
+        "typeorm",
+        "postgres",
+        "type-graphql",
+        "redis",
+        "heroku",
+        "github actions"
+    ],
     "author": "Florian Stolz",
     "license": "ISC",
     "bugs": {
@@ -49,6 +56,7 @@
     "homepage": "https://github.com/CodingForFunAndProfit/OrganizerApi#readme",
     "dependencies": {
         "apollo-server-express": "^2.11.0",
+        "app-root-path": "^3.0.0",
         "bcryptjs": "^2.4.3",
         "body-parser": "^1.19.0",
         "compression": "^1.7.4",
@@ -59,18 +67,24 @@
         "express": "^4.17.1",
         "express-session": "^1.17.0",
         "graphql": "^14.6.0",
-        "graphql-query-complexity": "^0.4.1",
-        "ioredis": "^4.16.0",
+        "ioredis": "^4.16.1",
+        "jsonwebtoken": "^8.5.1",
         "morgan": "^1.10.0",
         "nodemailer": "^6.4.6",
-        "pg": "^7.18.2",
+        "nodemon": "^2.0.2",
+        "pg": "^8.0.0",
         "reflect-metadata": "^0.1.13",
+        "serve-favicon": "^2.5.0",
         "type-graphql": "^0.17.6",
+        "typedi": "^0.8.0",
         "typeorm": "^0.2.24",
-        "uuid": "^7.0.2",
-        "jsonwebtoken": "^8.5.1"
+        "typeorm-typedi-extensions": "^0.2.3",
+        "uuid": "^7.0.3",
+        "winston": "^3.2.1",
+        "winston-daily-rotate-file": "^4.4.2"
     },
     "devDependencies": {
+        "@types/app-root-path": "^1.2.4",
         "@types/bcryptjs": "^2.4.2",
         "@types/body-parser": "^1.19.0",
         "@types/compression": "^1.7.0",
@@ -78,26 +92,26 @@
         "@types/cookie-parser": "^1.4.2",
         "@types/cors": "^2.8.6",
         "@types/debug": "^4.1.5",
-        "@types/express": "^4.17.3",
+        "@types/express": "^4.17.4",
         "@types/express-session": "^1.17.0",
         "@types/faker": "^4.1.11",
         "@types/ioredis": "^4.14.9",
-        "@types/jest": "^25.1.4",
+        "@types/jest": "^25.2.1",
         "@types/jsonwebtoken": "^8.3.8",
         "@types/morgan": "^1.9.0",
-        "@types/node": "^13.9.5",
+        "@types/node": "^13.11.0",
         "@types/nodemailer": "^6.4.0",
+        "@types/serve-favicon": "^2.5.0",
         "@types/supertest": "^2.0.8",
         "@types/uuid": "^7.0.2",
-        "cross-env": "^7.0.2",
+        "@types/winston": "^2.4.4",
         "faker": "^4.1.0",
-        "jest": "^25.2.3",
-        "nodemon": "^2.0.2",
+        "jest": "^25.2.7",
         "rimraf": "^3.0.2",
         "supertest": "^4.0.2",
-        "ts-jest": "^25.2.1",
-        "ts-node": "^8.8.1",
-        "tslint": "^6.1.0",
-        "typescript": "3.7.5"
+        "ts-jest": "^25.3.1",
+        "ts-node": "^8.8.2",
+        "tslint": "^6.1.1",
+        "typescript": "^3.8.3"
     }
 }

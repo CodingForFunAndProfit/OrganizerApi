@@ -7,12 +7,8 @@ export const createAccessToken = (uid: string) => {
     });
 };
 
-export const createRefreshToken = (user: User) => {
-    return sign(
-        { userId: user.id },
-        process.env.REFRESH_TOKEN_SECRET as string,
-        {
-            expiresIn: '5d',
-        }
-    );
+export const createRefreshToken = (uid: string) => {
+    return sign({ userId: uid }, process.env.REFRESH_TOKEN_SECRET as string, {
+        expiresIn: '5d',
+    });
 };

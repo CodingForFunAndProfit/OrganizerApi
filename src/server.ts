@@ -1,28 +1,24 @@
-// module dependencies
-import './utils/env';
+import './config/env';
+
 import Debug from 'debug';
-import { appPromise } from './app';
+import App from './app';
+
 const debug = Debug('app');
-import http from 'http';
+
+if (process.env.NODE_ENV) {
+    debug('NODE_ENV: "' + process.env.NODE_ENV.trim() + '"');
+}
 
 const httpPort = normalizePort(process.env.PORT || '8080');
-let httpServer: any;
 
-appPromise.then((app: Express.Application) => {
-    // app.set('port', httpPort);
+const app = new App();
+const httpServer = app.listen(httpPort as number);
 
-    httpServer = http.createServer(app);
+httpServer.on('error', onError);
+httpServer.on('listening', onListening);
 
-    httpServer.listen(httpPort);
+export default httpServer;
 
-    httpServer.on('error', onError);
-
-    httpServer.on('listening', onListening);
-});
-
-/**
- * Normalize a port into a number, string, or false.
- */
 function normalizePort(val: string) {
     const port = parseInt(val, 10);
 
@@ -39,9 +35,6 @@ function normalizePort(val: string) {
     return false;
 }
 
-/**
- * Event listener for HTTP server "error" event.
- */
 function onError(error: any) {
     if (error.syscall !== 'listen') {
         throw error;
@@ -64,12 +57,31 @@ function onError(error: any) {
     }
 }
 
-/**
- * Event listener for HTTP server "listening" event.
- */
 function onListening() {
     const addr = httpServer.address();
     const bind =
         typeof addr === 'string' ? 'pipe ' + addr : 'port ' + addr.port;
     debug('Listening on ' + bind);
 }
+
+/*
+import App from './app';
+
+import * as bodyParser from 'body-parser';
+import loggerMiddleware from './middleware/logger';
+
+import PostsController from './controllers/posts/posts.controller';
+import HomeController from './controllers/home/home.controller';
+
+const app = new App({
+    port: 5000,
+    controllers: [new HomeController(), new PostsController()],
+    middleWares: [
+        bodyParser.json(),
+        bodyParser.urlencoded({ extended: true }),
+        loggerMiddleware,
+    ],
+});
+
+export default app.listen();
+*/

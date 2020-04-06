@@ -1,12 +1,8 @@
 import Redis from 'ioredis';
-// import debug from 'debug';
 
 export const redis = new Redis(process.env.REDISLABSURL, {
     password: process.env.REDISLABSPASSWORD,
-    showFriendlyErrorStack: process.env.NODE_ENV !== 'production'
+    showFriendlyErrorStack: process.env.NODE_ENV.trim() !== 'production',
+    lazyConnect: true,
+    maxRetriesPerRequest: 10,
 });
-/*
-redis.on('error', (error: any) => {
-    debug(error);
-});
-*/

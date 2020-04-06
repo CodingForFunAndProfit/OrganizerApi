@@ -68,6 +68,13 @@ PostgreSQL / TypeORM:
 -   databases (dev, test & production) -> finalize workflow with ci / createConnection is bad right now
 -   docker yes / no?
 
+-   linkmanager (saving links, auto tag them, display them after search...)
+-   tokensecret dynamic on each app start -> less env vars -> less can go wrong -> secure?
+-   add functionality and tests for invalidating tokens
+-   add rolebased authorization for admins/users/other groups
+-   couldn't compile with OrganizerApiOld tsconfig.json (look for the problem)
+-   cleanup connectTypeorm
+
 ## Links
 
 -   [Postman: Test Api calls](https://www.postman.com)
