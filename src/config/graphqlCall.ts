@@ -1,8 +1,6 @@
 import { graphql, GraphQLSchema } from 'graphql';
 import { createSchema } from '../api/createSchema';
 import Maybe from 'graphql/tsutils/Maybe';
-import { Context } from '../types/context';
-import express from 'express';
 
 interface GraphQLCallOptions {
     source: string;
