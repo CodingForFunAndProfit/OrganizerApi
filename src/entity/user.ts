@@ -1,5 +1,5 @@
 import { Entity, Column, PrimaryGeneratedColumn, BaseEntity } from 'typeorm';
-import { ObjectType, Field, ID } from 'type-graphql';
+import { ObjectType, Field, ID, Int } from 'type-graphql';
 
 @ObjectType()
 @Entity()
@@ -17,4 +17,13 @@ export class User extends BaseEntity {
 
     @Column('bool', { default: false })
     public confirmed!: boolean;
+}
+
+// tslint:disable-next-line: max-classes-per-file
+@ObjectType()
+export class PagedUsersResponse {
+    @Field((type) => [User])
+    public users: User[];
+    @Field((type) => Int)
+    public total: number;
 }

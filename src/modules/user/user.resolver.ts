@@ -5,11 +5,12 @@ import {
     Mutation,
     Ctx,
     UseMiddleware,
+    ObjectType,
 } from 'type-graphql';
 import bcrypt from 'bcryptjs';
 import { Service } from 'typedi';
 
-import { User } from '../../entity/user';
+import { User, PagedUsersResponse } from '../../entity/user';
 import { UserInput } from './user.input';
 import { RegisterInput } from './inputs/register.input';
 import { Context } from '../../types/context';
@@ -34,6 +35,23 @@ import { blacklistToken } from '../../utils/tokenBlacklist';
 import { LoggerStream } from '../../config/winston';
 import { verifyRefreshToken } from '../../utils/verifyToken';
 
+import { InputType, Field } from 'type-graphql';
+
+@InputType()
+export class PagingInput {
+    @Field()
+    pageSize!: number;
+    @Field()
+    pageNo!: number;
+}
+// tslint:disable-next-line: max-classes-per-file
+@InputType()
+export class SortByInput {
+    @Field()
+    by: string;
+    @Field()
+    sort: string;
+}
 const createUserwPassword = async (
     email: string,
     password: string
@@ -46,11 +64,21 @@ const createUserwPassword = async (
 
     return user;
 };
+
+interface LoginResponse {
+    accesToken: string;
+    user: User;
+}
+// tslint:disable-next-line: max-classes-per-file
+
 @Service()
 // tslint:disable-next-line: max-classes-per-file
 @Resolver()
 export class UserResolver {
+    // let usersPage:pagedResponse;
+
     constructor(private readonly logger: LoggerStream) {}
+
     @Query(() => [User])
     public async users() {
         // getConnection('test').getRepository(UserEntity).find();
@@ -63,6 +91,39 @@ export class UserResolver {
         return users;
     }
 
+    @Query(() => PagedUsersResponse, { nullable: true })
+    public async pagedusers(
+        @Arg('input', () => PagingInput) input: PagingInput,
+        @Arg('sortby', () => SortByInput) sortby: SortByInput
+    ) {
+        const sortbycolumn = sortby.by;
+        const direction = sortby.sort;
+        // console.log(sortby);
+        // let users: User[];
+        try {
+            const res = await User.createQueryBuilder('user')
+                .skip(input.pageNo * input.pageSize)
+                .take(input.pageSize)
+                .orderBy(sortbycolumn, direction === 'asc' ? 'ASC' : 'DESC')
+                .getManyAndCount();
+            /*
+            const count = await User.findAndCount({
+                skip: input.pageNo * input.pageSize,
+                take: input.pageSize,
+            });
+
+            users = await User.find({
+                skip: input.pageNo * input.pageSize,
+                take: input.pageSize,
+            });
+            */
+
+            return { users: res[0], total: res[1] };
+        } catch (error) {
+            this.logger.error(error);
+        }
+        return null;
+    }
     // create
     // two use cases
     // 1: user registers
