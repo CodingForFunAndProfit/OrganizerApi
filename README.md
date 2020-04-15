@@ -1,3 +1,5 @@
+[![build status](https://github.com/CodingForFunAndProfit/OrganizerApi/NodeJSCI/badge.svg)](https://github.com/CodingForFunAndProfit/OrganizerApi/actions)
+
 # OrganizerApi
 
 ## Using it
