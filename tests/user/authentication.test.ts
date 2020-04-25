@@ -19,7 +19,15 @@ mutation loginUser($email: String!, $password: String!) {
     login(
         email: $email,
         password: $password
-    )
+    ) {
+        accessToken
+        msg
+        login
+        user {
+            id
+            email
+        }
+    }
 }
 `;
 const logoutUserMutation = `
@@ -46,7 +54,7 @@ describe('User authentication - Queries & Mutations', () => {
         password: faker.internet.password(10),
     };
     let token: string;
-    it('login should return accessToken for a valid username & password', async () => {
+    it('login should return success LoginResult for a valid username & password', async () => {
         const hashedPassword = await bcrypt.hash(newUser.password, 12);
         let user: User;
         user = await User.create({
@@ -71,7 +79,7 @@ describe('User authentication - Queries & Mutations', () => {
         const { data } = response;
         expect(data).toHaveProperty('login');
         expect(data.login).not.toEqual(null);
-        token = data.login;
+        token = data.login.accessToken;
     });
 
     it('me should return User for a valid accessToken', async () => {

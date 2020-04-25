@@ -4,6 +4,6 @@ export const refreshTokenName = 'refreshtoken';
 
 export const sendRefreshToken = (res: Response, token: string) => {
     res.cookie(refreshTokenName, token, {
-        httpOnly: true,
+        httpOnly: false,
     });
 };

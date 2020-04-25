@@ -5,13 +5,12 @@ import {
     Mutation,
     Ctx,
     UseMiddleware,
-    ObjectType,
 } from 'type-graphql';
 import bcrypt from 'bcryptjs';
 import { Service } from 'typedi';
 
-import { User, PagedUsersResponse } from '../../entity/user';
-import { UserInput } from './user.input';
+import { User, PagedUsersResponse, LoginResponse } from '../../entity/user';
+import { UserInput } from './inputs/user.input';
 import { RegisterInput } from './inputs/register.input';
 import { Context } from '../../types/context';
 import {
@@ -65,10 +64,6 @@ const createUserwPassword = async (
     return user;
 };
 
-interface LoginResponse {
-    accesToken: string;
-    user: User;
-}
 // tslint:disable-next-line: max-classes-per-file
 
 @Service()
@@ -124,9 +119,7 @@ export class UserResolver {
         }
         return null;
     }
-    // create
-    // two use cases
-    // 1: user registers
+
     // 2: user gets created by an admin -> password strategy?
     @Mutation(() => Boolean)
     async createUser(@Arg('input', () => RegisterInput) input: RegisterInput) {
@@ -139,7 +132,6 @@ export class UserResolver {
         }
     }
 
-    // read
     @Query(() => User, { nullable: true })
     async user(@Arg('id', () => String) id: string): Promise<User> {
         try {
@@ -155,7 +147,6 @@ export class UserResolver {
         return null;
     }
 
-    // update
     @Mutation(() => Boolean)
     async updateUser(
         @Arg('id', () => String) id: string,
@@ -170,7 +161,6 @@ export class UserResolver {
         return true;
     }
 
-    // delete
     @Mutation(() => Boolean)
     async deleteUser(@Arg('id', (type) => String) id: string) {
         try {
@@ -185,11 +175,11 @@ export class UserResolver {
     @Mutation(() => Boolean)
     public async UserRegister(
         @Arg('input')
-        input: RegisterInput
+        { email, password }: RegisterInput
     ): Promise<boolean> {
         let user;
         try {
-            user = await createUserwPassword(input.email, input.password);
+            user = await createUserwPassword(email, password);
         } catch (error) {
             this.logger.error(error, null);
             return false;
@@ -214,54 +204,50 @@ export class UserResolver {
 
         return true;
     }
-    @Mutation(() => String, { nullable: true })
+
+    @Mutation(() => LoginResponse)
     public async login(
         @Arg('email') email: string,
         @Arg('password') password: string,
         @Ctx() ctx: Context
-    ): Promise<string | null> {
+    ): Promise<LoginResponse> {
+        const result = new LoginResponse();
+        result.login = 'Failure';
+        result.msg = 'There was a problem during authentication';
+        result.accessToken = '1234';
+        result.user = null;
+
         const user = await User.findOne({ where: { email } });
-        // this.logger.info(null, user);
         if (!user) {
-            return null;
+            result.msg = 'User not found.'; // change later to user not found or password wrong
+            return result;
         }
 
         const valid = await bcrypt.compare(password, user.password);
 
         if (!valid) {
-            return null;
+            result.msg = 'Password wrong.'; // change later to user not found or password wrong
+            return result;
         }
 
         if (!user.confirmed) {
-            return null;
+            result.msg = 'User not confirmed yet.'; // change later to user not found or password wrong
+            return result;
         }
 
         const refreshToken = createRefreshToken(user.id);
         const accessToken = createAccessToken(user.id);
 
         sendRefreshToken(ctx.res, refreshToken);
-        // ctx.res.cookie(refreshTokenName, refreshToken);
-        // ctx.res.cookie('access-token', accessToken);
-        // ctx.req.session!.userId = user.id;
 
-        return accessToken;
+        result.user = user;
+        result.accessToken = accessToken;
+        result.login = 'success';
+        result.msg = 'User authenticated';
+
+        return result;
     }
-    /*
-    @Mutation(() => Boolean)
-    // tslint:disable-next-line: ban-types
-    public async logout(@Ctx() ctx: Context): Promise<Boolean> {
-        return new Promise((res, rej) =>
-            ctx.req.session!.destroy(err => {
-                if (err) {
-                    console.log(err);
-                    return rej(false);
-                }
-                ctx.res.clearCookie('qid');
-                return res(true);
-            })
-        );
-    }
-    */
+
     @Query(() => User, { nullable: true })
     @UseMiddleware(isAuth)
     public async me(@Ctx() ctx: Context): Promise<User | undefined> {
@@ -278,6 +264,7 @@ export class UserResolver {
         sendRefreshToken(ctx.res, '');
         return true;
     }
+
     @Mutation(() => String, { nullable: true })
     public async refreshtoken(@Ctx() ctx: Context): Promise<string | null> {
         let accessToken: string;

@@ -22,6 +22,8 @@ import appRoot from 'app-root-path';
 
 import connectRedis from 'connect-redis';
 import { redis } from './utils/redis';
+import { formatGraphQLError } from './utils/formatGraphQLError';
+import { GraphQLError } from 'graphql';
 
 export default class App {
     public app: Application;
@@ -49,27 +51,7 @@ export default class App {
         this.app.use(express.static('public'));
         // this.app.use(express.static('views'));
     }
-    /*
-    private middlewares(middleWares: {
-        forEach: (arg0: (middleWare: any) => void) => void;
-    }) {
-        middleWares.forEach(middleWare => {
-            this.app.use(middleWare);
-        });
-    }
 
-    private routes(controllers: {
-        forEach: (arg0: (controller: any) => void) => void;
-    }) {
-        controllers.forEach(controller => {
-            this.app.use('/', controller.router);
-        });
-    }
-
-    private template() {
-        this.app.set('view engine', 'pug');
-    }
-    */
     private applyMiddlewares() {
         this.app.use(morgan('combined', { stream: logger }));
         this.app.use(express.static(path.resolve(`${appRoot}`, 'public')));
@@ -110,6 +92,9 @@ export default class App {
             context: ({ req, res }: any) => ({ req, res }),
             playground: true,
             introspection: true,
+            formatError: (error: GraphQLError) => {
+                return formatGraphQLError(error);
+            },
         });
         this.apolloServer.applyMiddleware({
             app: this.app,

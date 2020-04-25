@@ -4,6 +4,6 @@ import { Field, InputType } from 'type-graphql';
 @InputType()
 export class PasswordInput {
     @Field()
-    @MinLength(8)
-    public password!: string;
+    @MinLength(5)
+    public password: string;
 }

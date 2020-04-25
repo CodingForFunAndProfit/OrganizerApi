@@ -1,5 +1,7 @@
 import { Entity, Column, PrimaryGeneratedColumn, BaseEntity } from 'typeorm';
 import { ObjectType, Field, ID, Int } from 'type-graphql';
+import { MinLength } from 'class-validator';
+import { IsEmailUnique } from '../api/validators/isEmailUnique.validator';
 
 @ObjectType()
 @Entity()
@@ -26,4 +28,17 @@ export class PagedUsersResponse {
     public users: User[];
     @Field((type) => Int)
     public total: number;
+}
+
+@ObjectType()
+// tslint:disable-next-line: max-classes-per-file
+export class LoginResponse {
+    @Field((type) => String)
+    accessToken: string;
+    @Field((type) => User, { nullable: true })
+    user: User;
+    @Field((type) => String)
+    msg: string;
+    @Field((type) => String)
+    login: string;
 }
