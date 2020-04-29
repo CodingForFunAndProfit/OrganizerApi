@@ -13,11 +13,11 @@ export async function sendEmail(email: string, url: string) {
     // const info =
     try {
         await transporter.sendMail({
-            from: '"LinkManager" <lima@lima4you.com>', // sender address
+            from: '"Organizer" <boss@kehdata.com>', // sender address
             to: email,
-            subject: 'Hi',
+            subject: 'Confirm your registration',
             text: `${url}`,
-            html: `<a href="${url}">${url}</a>`,
+            html: `Hi, please confirm your registration by clicking on the following link: <a href="${url}">${url}</a>`,
         });
     } catch (error) {
         console.error('Error:' + error);

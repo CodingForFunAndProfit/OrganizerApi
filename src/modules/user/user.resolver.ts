@@ -164,7 +164,20 @@ export class UserResolver {
     @Mutation(() => Boolean)
     async deleteUser(@Arg('id', (type) => String) id: string) {
         try {
-            await User.delete({ id });
+            const result = await User.delete({ id });
+            // this.logger.info('Deletion result: ', result);
+        } catch (error) {
+            this.logger.error(error);
+            return false;
+        }
+        return true;
+    }
+
+    @Mutation(() => Boolean)
+    async deleteUserByEmail(@Arg('email', (type) => String) email: string) {
+        try {
+            const result = await User.delete({ email });
+            // this.logger.info('Deletion result: ', result);
         } catch (error) {
             this.logger.error(error);
             return false;

@@ -14,6 +14,7 @@
     EMAILPASSWORD=mailadresspassword
     REFRESH_TOKEN_SECRET=RefreshtokenSecret
     ACCESS_TOKEN_SECRET=AccesstokenSecret
+    FRONTEND_URL=http://localhost:4200
     ---snip
 
 ## Technologies
@@ -84,13 +85,10 @@ PostgreSQL / TypeORM:
 
 ## TODOS
 
+-   read environment vars and set app-vars with default if something is missing
 -   restructuring / better of files&modules
--   confirm user link generation config file for dev and live
--   tests, frst working examples exist -> finish current resolvers
 -   github commit messages styleguide
 
 -   linkmanager (saving links, auto tag them, display them after search...)
 -   add functionality and tests for invalidating tokens
 -   add rolebased authorization for admins/users/other groups
--   couldn't compile with OrganizerApiOld tsconfig.json (look for the problem)
--   cleanup connectTypeorm

@@ -13,12 +13,12 @@ export const createConfirmationUrl = (userId: string) => {
         console.error(error);
     }
 
-    return `http://localhost:8080/confirm-user/${id}`;
+    return `${process.env.FRONTEND_URL}/confirmuser/${id}`;
 };
 
 export const createForgotPasswordUrl = (userId: string) => {
     const id = v4();
     redis.set(forgotPasswordPrefix + id, userId, 'ex', 60 * 60 * 24); // 1 day expiration
 
-    return `http://localhost:8080/change-password/${id}`;
+    return `${process.env.FRONTEND_URL}/changepassword/${id}`;
 };
