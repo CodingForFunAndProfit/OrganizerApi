@@ -2,21 +2,21 @@ import nodemailer from 'nodemailer';
 
 export async function sendEmail(email: string, url: string) {
     const transporter = nodemailer.createTransport({
-        service: 'gmail',
+        host: process.env.EMAILHOST,
+        port: 25,
+        secure: false,
         auth: {
             user: process.env.EMAILACCOUNT,
             pass: process.env.EMAILPASSWORD,
         },
     });
 
-    // send mail with defined transport object
-    // const info =
     try {
         await transporter.sendMail({
-            from: '"Organizer" <boss@kehdata.com>', // sender address
+            from: '"Organizer" <organizer@kehdata.com>',
             to: email,
             subject: 'Confirm your registration',
-            text: `${url}`,
+            text: `Hi, please confirm your registration by visiting the following url: ${url}`,
             html: `Hi, please confirm your registration by clicking on the following link: <a href="${url}">${url}</a>`,
         });
     } catch (error) {

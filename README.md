@@ -85,6 +85,7 @@ PostgreSQL / TypeORM:
 
 ## TODOS
 
+-   checkout email-templates https://email-templates.js.org
 -   read environment vars and set app-vars with default if something is missing
 -   restructuring / better of files&modules
 -   github commit messages styleguide
@@ -92,3 +93,16 @@ PostgreSQL / TypeORM:
 -   linkmanager (saving links, auto tag them, display them after search...)
 -   add functionality and tests for invalidating tokens
 -   add rolebased authorization for admins/users/other groups
+
+## Documentations
+
+-   [Nodemailer](https://nodemailer.com)
+-   [ExpressJS](https://expressjs.com/)
+-   [GraphQL](https://graphql.org/)
+-   [Apollo GraphQL](https://www.apollographql.com/)
+-   [TypeGraphQL](https://typegraphql.com/)
+-   [PostgreSQL](https://www.postgresql.org/)
+-   [TypeORM](https://typeorm.io/)
+-   [Redis](https://redis.io/)
+-   [Github Actions](https://help.github.com/en/actions)
+-   [JsonWebTokens](https://jwt.io/)
