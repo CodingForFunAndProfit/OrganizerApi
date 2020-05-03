@@ -4,11 +4,18 @@ import { Container } from 'typedi';
 import { HomeResolver } from '../modules/home/home.resolver';
 import { UserResolver } from '../modules/user/user.resolver';
 import { GraphQLSchema } from 'graphql';
+import { ForgotPasswordResolver } from '../modules/user/forgotpassword.resolver';
+import { ChangePasswordResolver } from '../modules/user/changepassword.resolver';
 
 export const createSchema = async (): Promise<GraphQLSchema> => {
     try {
         const schema = await buildSchema({
-            resolvers: [HomeResolver, UserResolver],
+            resolvers: [
+                HomeResolver,
+                UserResolver,
+                ForgotPasswordResolver,
+                ChangePasswordResolver,
+            ],
             validate: true,
             /*
             authChecker: ({ context: { req } }) => {

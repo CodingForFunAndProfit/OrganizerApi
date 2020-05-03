@@ -35,16 +35,12 @@ export default class App {
 
         this.connectDatabase();
 
+        this.applyMiddlewares();
+        this.assets();
+
         this.app.get('/', new HomeController().router);
         this.app.get('/user', new UserController().router);
 
-        this.applyMiddlewares();
-        this.assets();
-        /*
-        this.app.get('/', (_req, res) => {
-            res.send('Hello World!');
-        });
-        */
         this.initSchema();
     }
     private assets() {
@@ -53,16 +49,18 @@ export default class App {
     }
 
     private applyMiddlewares() {
-        this.app.use(morgan('combined', { stream: logger }));
-        this.app.use(express.static(path.resolve(`${appRoot}`, 'public')));
-        this.app.use(favicon(path.resolve(`${appRoot}`, 'public/favicon.ico')));
-        const clientOrigin = '*';
+        const clientOrigin = process.env.FRONTEND_URL;
         this.app.use(
             cors({
                 credentials: true,
                 origin: clientOrigin,
             })
         );
+
+        this.app.use(morgan('combined', { stream: logger }));
+        this.app.use(express.static(path.resolve(`${appRoot}`, 'public')));
+        this.app.use(favicon(path.resolve(`${appRoot}`, 'public/favicon.ico')));
+
         this.app.use(bodyParser.json());
         this.app.use(bodyParser.urlencoded({ extended: true }));
         this.app.use(cookieParser());
@@ -99,6 +97,7 @@ export default class App {
         this.apolloServer.applyMiddleware({
             app: this.app,
             path: this.APIPATH,
+            cors: false,
         });
     }
 

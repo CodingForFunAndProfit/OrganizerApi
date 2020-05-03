@@ -35,6 +35,7 @@ import { LoggerStream } from '../../config/winston';
 import { verifyRefreshToken } from '../../utils/verifyToken';
 
 import { InputType, Field } from 'type-graphql';
+import path from 'path';
 
 @InputType()
 export class PagingInput {
@@ -198,8 +199,15 @@ export class UserResolver {
             return false;
         }
         const url = createConfirmationUrl(user.id);
-        this.logger.info(url);
-        sendEmail(user.email, url);
+        // this.logger.info(url);
+        const vars = { url };
+
+        sendEmail(
+            'userregistration',
+            path.resolve(__dirname, 'templates'),
+            user.email,
+            vars
+        );
         return true;
     }
 
@@ -213,7 +221,7 @@ export class UserResolver {
 
         await User.update({ id: userId }, { confirmed: true });
 
-        await redis.del(token);
+        await redis.del(confirmUserPrefix + token);
 
         return true;
     }
