@@ -4,7 +4,7 @@ import path from 'path';
 
 import { redis } from '../../utils/redis';
 import { sendEmail } from '../../utils/sendEmail';
-import { forgotPasswordPrefix } from '../../utils/redisPrefixes';
+import { forgotPasswordPrefix } from '../../utils/redisprefixes';
 import { User } from '../../entity/user';
 import { createForgotPasswordUrl } from '../../utils/createurls';
 import { LoggerStream } from '../../config/winston';

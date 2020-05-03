@@ -2,7 +2,7 @@ import { Resolver, Mutation, Arg } from 'type-graphql';
 import bcrypt from 'bcryptjs';
 
 import { redis } from '../../utils/redis';
-import { forgotPasswordPrefix } from '../../utils/redisPrefixes';
+import { forgotPasswordPrefix } from '../../utils/redisprefixes';
 import { User } from '../../entity/user';
 import { LoggerStream } from '../../config/winston';
 
