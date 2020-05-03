@@ -81,7 +81,9 @@
         "typeorm-typedi-extensions": "^0.2.3",
         "uuid": "^7.0.3",
         "winston": "^3.2.1",
-        "winston-daily-rotate-file": "^4.4.2"
+        "winston-daily-rotate-file": "^4.4.2",
+        "email-templates": "^7.0.4",
+        "pug": "^2.0.4"
     },
     "devDependencies": {
         "@types/app-root-path": "^1.2.4",
@@ -107,10 +109,8 @@
         "@types/supertest": "^2.0.8",
         "@types/uuid": "^7.0.2",
         "@types/winston": "^2.4.4",
-        "email-templates": "^7.0.4",
         "faker": "^4.1.0",
         "jest": "^25.2.7",
-        "pug": "^2.0.4",
         "rimraf": "^3.0.2",
         "supertest": "^4.0.2",
         "ts-jest": "^25.3.1",
