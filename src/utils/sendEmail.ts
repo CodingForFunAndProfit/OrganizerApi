@@ -27,7 +27,9 @@ export async function sendEmail(
         });
     } catch (error) {
         console.error(error);
-        console.error(`templateRoot: ${path.join(__dirname, 'templates')}`);
+        console.error(
+            `templateRoot: ${path.resolve(`${appRoot}`, 'templates')}`
+        );
         return null;
     }
     email
@@ -43,7 +45,9 @@ export async function sendEmail(
         })
         .catch((error) => {
             console.error(error);
-            console.error(`templateRoot: ${path.join(__dirname, 'templates')}`);
+            console.error(
+                `templateRoot: ${path.resolve(`${appRoot}`, 'templates')}`
+            );
             return null;
         });
 }
