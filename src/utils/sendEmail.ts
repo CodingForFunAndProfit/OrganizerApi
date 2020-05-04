@@ -6,8 +6,9 @@ export async function sendEmail(
     emailaddress: string,
     variables: any
 ) {
+    let email: Email;
     try {
-        const email = new Email({
+        email = new Email({
             message: {
                 from: '"Organizer" <organizer@kehdata.com>',
             },
@@ -23,19 +24,25 @@ export async function sendEmail(
                 },
             },
         });
-        email
-            .send({
-                template,
-                message: {
-                    to: emailaddress,
-                },
-                locals: variables,
-            })
-            .then(() => {
-                console.log('Sent email.');
-            });
     } catch (error) {
         console.error(error);
         console.error(`templateRoot: ${templateRoot}`);
+        return null;
     }
+    email
+        .send({
+            template,
+            message: {
+                to: emailaddress,
+            },
+            locals: variables,
+        })
+        .then(() => {
+            console.log('Sent email.');
+        })
+        .catch((error) => {
+            console.error(error);
+            console.error(`templateRoot: ${templateRoot}`);
+            return null;
+        });
 }
