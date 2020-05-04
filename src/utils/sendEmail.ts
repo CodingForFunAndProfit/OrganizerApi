@@ -36,5 +36,6 @@ export async function sendEmail(
             });
     } catch (error) {
         console.error(error);
+        console.error(`templateRoot: ${templateRoot}`);
     }
 }

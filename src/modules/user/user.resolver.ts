@@ -199,7 +199,7 @@ export class UserResolver {
             return false;
         }
         const url = createConfirmationUrl(user.id);
-        // this.logger.info(url);
+
         const vars = { url };
 
         sendEmail(
