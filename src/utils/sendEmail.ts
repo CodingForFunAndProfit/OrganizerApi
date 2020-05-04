@@ -1,8 +1,9 @@
 import Email from 'email-templates';
+import appRoot from 'app-root-path';
+import * as path from 'path';
 
 export async function sendEmail(
     template: string,
-    templateRoot: string,
     emailaddress: string,
     variables: any
 ) {
@@ -12,7 +13,7 @@ export async function sendEmail(
             message: {
                 from: '"Organizer" <organizer@kehdata.com>',
             },
-            views: { root: templateRoot },
+            views: { root: path.resolve(`${appRoot}`, 'templates') },
             send: true,
             transport: {
                 host: process.env.EMAILHOST,
@@ -26,7 +27,7 @@ export async function sendEmail(
         });
     } catch (error) {
         console.error(error);
-        console.error(`templateRoot: ${templateRoot}`);
+        console.error(`templateRoot: ${path.join(__dirname, 'templates')}`);
         return null;
     }
     email
@@ -42,7 +43,7 @@ export async function sendEmail(
         })
         .catch((error) => {
             console.error(error);
-            console.error(`templateRoot: ${templateRoot}`);
+            console.error(`templateRoot: ${path.join(__dirname, 'templates')}`);
             return null;
         });
 }

@@ -202,12 +202,7 @@ export class UserResolver {
 
         const vars = { url };
 
-        sendEmail(
-            'userregistration',
-            path.resolve(__dirname, 'templates'),
-            user.email,
-            vars
-        );
+        sendEmail('userregistration', user.email, vars);
         return true;
     }
 

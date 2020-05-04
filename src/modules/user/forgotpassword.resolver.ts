@@ -31,12 +31,7 @@ export class ForgotPasswordResolver {
             );
 
             const vars = { url: createForgotPasswordUrl(user.id) };
-            await sendEmail(
-                'forgotpassword',
-                path.resolve(__dirname, 'templates'),
-                email,
-                vars
-            );
+            await sendEmail('forgotpassword', email, vars);
 
             return true;
         } catch (error) {
