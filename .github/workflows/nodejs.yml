@@ -44,3 +44,5 @@ jobs:
                   SESSION_SECRET: ${{ secrets.SESSION_SECRET }}
                   REDISLABSURL: ${{ secrets.REDISLABSURL }}
                   REDISLABSPASSWORD: ${{ secrets.REDISLABSPASSWORD }}
+                  VAPIDKEY_PUBLIC: ${{ secrets.VAPIDKEY_PUBLIC }}
+                  VAPIDKEY_PRIVATE: ${{ secrets.VAPIDKEY_PRIVATE }}
