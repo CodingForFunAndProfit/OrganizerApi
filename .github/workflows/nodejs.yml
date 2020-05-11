@@ -36,7 +36,7 @@ jobs:
             - run: npm run test
               env:
                   NODE_ENV: test
-                  DATABASE_URL: postgres://postgresuser:postgrespassword@localhost:${{ job.services.postgres.ports[5432] }}/postgres
+                  TESTDATABASE_URL: postgres://postgresuser:postgrespassword@localhost:${{ job.services.postgres.ports[5432] }}/postgres
                   ACCESS_TOKEN_SECRET: ${{ secrets.ACCESS_TOKEN_SECRET }}
                   REFRESH_TOKEN_SECRET: ${{ secrets.REFRESH_TOKEN_SECRET }}
                   EMAILACCOUNT: ${{ secrets.EMAILACCOUNT }}
