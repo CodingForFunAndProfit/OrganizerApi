@@ -18,8 +18,8 @@ module.exports = [
         type: 'postgres',
         url: process.env.DATABASE_URL,
         synchronize: true,
-        logging: false,
-        entities: ['./src/entity/*.ts'],
+        logging: 'all',
+        entities: ['./src/entity/**/*.ts'],
         cli: {
             entitiesDir: './src/entity',
         },
@@ -27,10 +27,11 @@ module.exports = [
     {
         name: 'test',
         type: 'postgres',
-        url: process.env.DATABASE_URL,
+        url: process.env.TESTDATABASE_URL,
         synchronize: true,
-        logging: false,
-        entities: ['./src/entity/*.ts'],
+        logging: 'all',
+        logger: 'file',
+        entities: ['./src/entity/**/*.ts'],
         migrations: ['./src/database/migrations/*.ts'],
         cli: {
             entitiesDir: './src/entity',
@@ -43,7 +44,7 @@ module.exports = [
         url: process.env.TESTDATABASE_URL,
         synchronize: true,
         logging: false,
-        entities: ['./src/entity/*.ts'],
+        entities: ['./src/entity/**/*.ts'],
         migrations: ['./src/database/migrations/*.ts'],
         cli: {
             entitiesDir: './src/entity',
