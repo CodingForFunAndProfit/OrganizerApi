@@ -50,7 +50,7 @@ export default class App {
     }
 
     private applyMiddlewares() {
-        const clientOrigin = process.env.CLIENT_ORIGIN?.split(',');
+        const clientOrigin = process.env.CLIENT_ORIGINS?.split(',');
         this.app.use(
             cors({
                 credentials: true,
