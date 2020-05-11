@@ -1,4 +1,4 @@
-name: NodeJSCI
+name: ci
 
 on:
     push:
