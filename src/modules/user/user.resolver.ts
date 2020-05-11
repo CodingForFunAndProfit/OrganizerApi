@@ -5,11 +5,13 @@ import {
     Mutation,
     Ctx,
     UseMiddleware,
+    InputType,
+    Field,
 } from 'type-graphql';
 import bcrypt from 'bcryptjs';
 import { Service } from 'typedi';
 
-import { User, PagedUsersResponse, LoginResponse } from '../../entity/user';
+import { User } from '../../entity/user';
 import { UserInput } from './inputs/user.input';
 import { RegisterInput } from './inputs/register.input';
 import { Context } from '../../types/context';
@@ -34,16 +36,10 @@ import { blacklistToken } from '../../utils/tokenBlacklist';
 import { LoggerStream } from '../../config/winston';
 import { verifyRefreshToken } from '../../utils/verifyToken';
 
-import { InputType, Field } from 'type-graphql';
-import path from 'path';
+import { PagedUsersResponse } from './types/pagesuserresponse.type';
+import { LoginResponse } from './types/loginresponse.type';
+import { PagingInput } from './inputs/paging.input';
 
-@InputType()
-export class PagingInput {
-    @Field()
-    pageSize!: number;
-    @Field()
-    pageNo!: number;
-}
 // tslint:disable-next-line: max-classes-per-file
 @InputType()
 export class SortByInput {
@@ -65,19 +61,14 @@ const createUserwPassword = async (
     return user;
 };
 
-// tslint:disable-next-line: max-classes-per-file
-
 @Service()
 // tslint:disable-next-line: max-classes-per-file
 @Resolver()
 export class UserResolver {
-    // let usersPage:pagedResponse;
-
     constructor(private readonly logger: LoggerStream) {}
 
     @Query(() => [User])
     public async users() {
-        // getConnection('test').getRepository(UserEntity).find();
         let users: User[];
         try {
             users = await User.find();
@@ -94,25 +85,13 @@ export class UserResolver {
     ) {
         const sortbycolumn = sortby.by;
         const direction = sortby.sort;
-        // console.log(sortby);
-        // let users: User[];
+
         try {
             const res = await User.createQueryBuilder('user')
                 .skip(input.pageNo * input.pageSize)
                 .take(input.pageSize)
                 .orderBy(sortbycolumn, direction === 'asc' ? 'ASC' : 'DESC')
                 .getManyAndCount();
-            /*
-            const count = await User.findAndCount({
-                skip: input.pageNo * input.pageSize,
-                take: input.pageSize,
-            });
-
-            users = await User.find({
-                skip: input.pageNo * input.pageSize,
-                take: input.pageSize,
-            });
-            */
 
             return { users: res[0], total: res[1] };
         } catch (error) {
@@ -276,8 +255,13 @@ export class UserResolver {
 
     @Mutation(() => Boolean)
     public async logout(@Ctx() ctx: Context): Promise<boolean> {
-        blacklistToken(ctx.req.headers.authorization);
-        sendRefreshToken(ctx.res, '');
+        try {
+            blacklistToken(ctx.req.headers.authorization);
+            sendRefreshToken(ctx.res, '');
+            return true;
+        } catch (error) {
+            this.logger.error(error);
+        }
         return true;
     }
 
@@ -286,7 +270,7 @@ export class UserResolver {
         let accessToken: string;
 
         const token = ctx.req.cookies[refreshTokenName];
-        // console.log(token);
+
         if (!token) {
             this.logger.info('no refreshtoken found');
             return null;
@@ -298,9 +282,6 @@ export class UserResolver {
             this.logger.error(error);
             return null;
         }
-        // console.log(payload);
-        // remove this later, no need for the user-data here
-        // user = await User.findOne(payload.userId);
 
         accessToken = createAccessToken(payload.userId);
         const refreshToken = createRefreshToken(payload.userId);

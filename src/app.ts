@@ -8,22 +8,22 @@ import session from 'express-session';
 import morgan from 'morgan';
 import favicon from 'serve-favicon';
 import * as path from 'path';
+import appRoot from 'app-root-path';
 
 import { ApolloServer } from 'apollo-server-express';
-
 import { connectTypeorm } from './config/connectTypeorm';
 import { createSchema } from './api/createSchema';
-
-import HomeController from './modules/home/home.controller';
-import UserController from './modules/user/user.controller';
-import logger from './config/winston';
-
-import appRoot from 'app-root-path';
+import { formatGraphQLError } from './utils/formatGraphQLError';
+import { GraphQLError } from 'graphql';
 
 import connectRedis from 'connect-redis';
 import { redis } from './utils/redis';
-import { formatGraphQLError } from './utils/formatGraphQLError';
-import { GraphQLError } from 'graphql';
+
+import logger from './config/winston';
+
+import HomeController from './modules/home/home.controller';
+import UserController from './modules/user/user.controller';
+import SubscriptionController from './modules/subscription/subscription.controller';
 
 export default class App {
     public app: Application;
@@ -40,6 +40,7 @@ export default class App {
 
         this.app.get('/', new HomeController().router);
         this.app.get('/user', new UserController().router);
+        this.app.get('/push', new SubscriptionController().router);
 
         this.initSchema();
     }
@@ -49,7 +50,7 @@ export default class App {
     }
 
     private applyMiddlewares() {
-        const clientOrigin = process.env.FRONTEND_URL;
+        const clientOrigin = process.env.CLIENT_ORIGIN?.split(',');
         this.app.use(
             cors({
                 credentials: true,
@@ -102,8 +103,12 @@ export default class App {
     }
 
     public async connectDatabase(): Promise<void> {
-        await connectTypeorm();
-        logger.info('Connected to database');
+        try {
+            await connectTypeorm();
+            logger.info('Connected to database');
+        } catch (error) {
+            logger.error(error);
+        }
     }
 
     public listen(port: any) {

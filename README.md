@@ -15,6 +15,9 @@
     REFRESH_TOKEN_SECRET=RefreshtokenSecret
     ACCESS_TOKEN_SECRET=AccesstokenSecret
     FRONTEND_URL=http://localhost:4200
+    CLIENT_ORIGINS=http://localhost:4200,http://localhost:4201
+    VAPIDKEY_PUBLIC=VapidPublicKey
+    VAPIDKEY_PRIVATE=VapidPrivateKey
     ---snip
 
 ## Technologies
@@ -85,7 +88,6 @@ PostgreSQL / TypeORM:
 
 ## TODOS
 
--   checkout email-templates https://email-templates.js.org
 -   read environment vars and set app-vars with default if something is missing
 -   restructuring / better of files&modules
 -   github commit messages styleguide
@@ -94,9 +96,10 @@ PostgreSQL / TypeORM:
 -   add functionality and tests for invalidating tokens
 -   add rolebased authorization for admins/users/other groups
 
+-   https://stackoverflow.com/questions/15726535/postgresql-which-datatype-should-be-used-for-currency
+
 ## Documentations
 
--   [Nodemailer](https://nodemailer.com)
 -   [ExpressJS](https://expressjs.com/)
 -   [GraphQL](https://graphql.org/)
 -   [Apollo GraphQL](https://www.apollographql.com/)
@@ -106,3 +109,5 @@ PostgreSQL / TypeORM:
 -   [Redis](https://redis.io/)
 -   [Github Actions](https://help.github.com/en/actions)
 -   [JsonWebTokens](https://jwt.io/)
+-   [email-templates](https://email-templates.js.org)
+-   [Nodemailer](https://nodemailer.com)

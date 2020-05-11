@@ -1,7 +1,16 @@
-import { Entity, Column, PrimaryGeneratedColumn, BaseEntity } from 'typeorm';
-import { ObjectType, Field, ID, Int } from 'type-graphql';
-import { MinLength } from 'class-validator';
-import { IsEmailUnique } from '../api/validators/isEmailUnique.validator';
+import {
+    Entity,
+    Column,
+    PrimaryGeneratedColumn,
+    BaseEntity,
+    OneToMany,
+} from 'typeorm';
+import { ObjectType, Field, ID } from 'type-graphql';
+import { Subscription } from './subscription';
+
+// import { MinLength } from 'class-validator';
+// validators didn't work the last time, try again
+// import { IsEmailUnique } from '../api/validators/isEmailUnique.validator';
 
 @ObjectType()
 @Entity()
@@ -19,26 +28,10 @@ export class User extends BaseEntity {
 
     @Column('bool', { default: false })
     public confirmed!: boolean;
-}
 
-// tslint:disable-next-line: max-classes-per-file
-@ObjectType()
-export class PagedUsersResponse {
-    @Field((type) => [User])
-    public users: User[];
-    @Field((type) => Int)
-    public total: number;
-}
-
-@ObjectType()
-// tslint:disable-next-line: max-classes-per-file
-export class LoginResponse {
-    @Field((type) => String)
-    accessToken: string;
-    @Field((type) => User, { nullable: true })
-    user: User;
-    @Field((type) => String)
-    msg: string;
-    @Field((type) => String)
-    login: string;
+    @Field((type) => [Subscription])
+    @OneToMany((type) => Subscription, (subscription) => subscription.user, {
+        onDelete: 'CASCADE',
+    })
+    subscriptions: Subscription[];
 }
