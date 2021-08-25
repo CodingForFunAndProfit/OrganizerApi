@@ -1,8 +1,9 @@
 import * as express from 'express';
 import { Request, Response } from 'express';
+import { Service } from 'typedi';
 import * as webpush from 'web-push';
 import { Subscription } from '../../entity/subscription';
-
+@Service()
 export default class SubscriptionController {
     public path = '/push';
     public router = express.Router();

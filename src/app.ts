@@ -11,6 +11,7 @@ import * as path from 'path';
 import appRoot from 'app-root-path';
 
 import { ApolloServer } from 'apollo-server-express';
+import { ApolloServerPluginLandingPageGraphQLPlayground } from 'apollo-server-core';
 import { connectTypeorm } from './config/connectTypeorm';
 import { createSchema } from './api/createSchema';
 import { formatGraphQLError } from './utils/formatGraphQLError';
@@ -66,6 +67,7 @@ export default class App {
         this.app.use(bodyParser.urlencoded({ extended: true }));
         this.app.use(cookieParser());
         const RedisStore = connectRedis(session);
+
         this.app.use(
             session({
                 store: new RedisStore({
@@ -89,12 +91,14 @@ export default class App {
         this.apolloServer = new ApolloServer({
             schema,
             context: ({ req, res }: any) => ({ req, res }),
-            playground: true,
             introspection: true,
             formatError: (error: GraphQLError) => {
                 return formatGraphQLError(error);
             },
+            plugins: [ApolloServerPluginLandingPageGraphQLPlayground()],
         });
+
+        await this.apolloServer.start();
         this.apolloServer.applyMiddleware({
             app: this.app,
             path: this.APIPATH,

@@ -1,6 +1,7 @@
 import * as express from 'express';
 import { Request, Response } from 'express';
-
+import { Service } from 'typedi';
+@Service()
 export default class HomeController {
     public path = '/';
     public router = express.Router();
