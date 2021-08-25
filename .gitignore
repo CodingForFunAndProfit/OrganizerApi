@@ -53,3 +53,4 @@ ormconfig.ts.old
 ormconfig.json
 ormlogs.log
 temp.txt
+vapidkeys.json
