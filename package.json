@@ -75,7 +75,7 @@
         "nodemailer": "^6.4.16",
         "nodemon": "^2.0.2",
         "pg": "^8.0.0",
-        "pug": "^2.0.4",
+        "pug": "^3.0.1",
         "reflect-metadata": "^0.1.13",
         "serve-favicon": "^2.5.0",
         "type-graphql": "^0.17.6",
