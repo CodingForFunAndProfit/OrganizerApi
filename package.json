@@ -56,9 +56,6 @@
     },
     "homepage": "https://github.com/CodingForFunAndProfit/OrganizerApi#readme",
     "dependencies": {
-<<<<<<< HEAD
-        "apollo-server-express": "^2.19.0",
-=======
         "apollo-server-express": "^2.14.2",
         "app-root-path": "^3.0.0",
         "bcryptjs": "^2.4.3",
