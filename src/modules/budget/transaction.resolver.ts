@@ -30,13 +30,14 @@ export class TransactionResolver extends BaseTransactionResolver {
                 this.logger.error('no account found');
             }
 
-            return Transaction.create({
+            const transaction = Transaction.create({
                 account,
                 title: input.title,
                 date: input.date,
-                amount: input.amount * MICROFACTOR,
+                amount: input.amount,
                 currencyCode: input.currencyCode,
             }).save();
+            return transaction;
         } catch (error) {
             this.logger.error(error);
         }

@@ -10,6 +10,7 @@ import { BudgetResolver } from '../modules/budget/budget.resolver';
 import { AccountResolver } from '../modules/budget/account.resolver';
 import { TransactionResolver } from '../modules/budget/transaction.resolver';
 import { SubscriptionResolver } from '../modules/subscription/subscription.resolver';
+import { RefResolver } from '../modules/ref/RefResolver';
 
 export const createSchema = async (): Promise<GraphQLSchema> => {
     try {
@@ -23,6 +24,7 @@ export const createSchema = async (): Promise<GraphQLSchema> => {
                 AccountResolver,
                 TransactionResolver,
                 SubscriptionResolver,
+                RefResolver,
             ],
             validate: true,
             /*

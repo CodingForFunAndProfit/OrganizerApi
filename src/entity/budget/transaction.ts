@@ -28,7 +28,7 @@ export class Transaction extends BaseEntity {
     title: string;
 
     @Field()
-    @Column('date')
+    @Column('timestamptz')
     date: Date;
 
     @Field()
