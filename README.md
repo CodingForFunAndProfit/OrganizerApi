@@ -1,24 +1,25 @@
-[![build status](https://github.com/CodingForFunAndProfit/OrganizerApi/NodeJSCI/badge.svg)](https://github.com/CodingForFunAndProfit/OrganizerApi/actions)
+[![build status](https://github.com/CodingForFunAndProfit/OrganizerApi/workflows/ci/badge.svg)](https://github.com/CodingForFunAndProfit/OrganizerApi/actions)
 
 # OrganizerApi
 
 ## Using it
 
 -   you need a .env file in the root folder
-    ---snip
-    DATABASE_URL=postgres://user:pass@localhost:5432/dbname
-    REDISLABSURL=your-redislabs-url.com:18609
-    REDISLABSPASSWORD=YourRedisLabPassword
-    SESSION_SECRET=ASessionSecret
-    EMAILACCOUNT=mailadress@gmail.com
-    EMAILPASSWORD=mailadresspassword
-    REFRESH_TOKEN_SECRET=RefreshtokenSecret
-    ACCESS_TOKEN_SECRET=AccesstokenSecret
-    FRONTEND_URL=http://localhost:4200
-    CLIENT_ORIGINS=http://localhost:4200,http://localhost:4201
-    VAPIDKEY_PUBLIC=VapidPublicKey
-    VAPIDKEY_PRIVATE=VapidPrivateKey
-    ---snip
+
+```
+DATABASE_URL=postgres://user:pass@localhost:5432/dbname
+REDISLABSURL=your-redislabs-url.com:18609
+REDISLABSPASSWORD=YourRedisLabPassword
+SESSION_SECRET=ASessionSecret
+EMAILACCOUNT=mailadress@gmail.com
+EMAILPASSWORD=mailadresspassword
+REFRESH_TOKEN_SECRET=RefreshtokenSecret
+ACCESS_TOKEN_SECRET=AccesstokenSecret
+FRONTEND_URL=http://localhost:4200
+CLIENT_ORIGINS=http://localhost:4200,http://localhost:4201
+VAPIDKEY_PUBLIC=VapidPublicKey
+VAPIDKEY_PRIVATE=VapidPrivateKey
+```
 
 ## Technologies
 
