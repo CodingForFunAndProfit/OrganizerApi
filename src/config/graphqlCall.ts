@@ -1,12 +1,14 @@
 import { graphql, GraphQLSchema } from 'graphql';
+import { Maybe } from 'graphql/jsutils/Maybe';
 import { createSchema } from '../api/createSchema';
-import Maybe from 'graphql/tsutils/Maybe';
 
 interface GraphQLCallOptions {
     source: string;
+
     variableValues?: Maybe<{
         [key: string]: any;
     }>;
+
     token?: string;
 }
 

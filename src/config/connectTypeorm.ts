@@ -28,7 +28,7 @@ const getConnectionToDefault = async (
         Object.assign(connectionOptions, { name: 'default' });
 
         // console.log(connectionOptions);
-        useContainer(Container);
+        useContainer(Container, { fallbackOnErrors: true });
         connection = await createConnection(connectionOptions);
         debug('Connection name:' + connection.name);
     } catch (error) {
